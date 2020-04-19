@@ -1,24 +1,14 @@
-# README
+# KOnfigurasi Devise
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1. Install gem devise, bisa diletakkan di gemfile lalu lakukan install dengan mengetikkan `bundle install`
 
-Things you may want to cover:
+2. Devise sudah terpasang, tinggal kita instal dengan mengetikkan perintah `rails g devise:install`
 
-* Ruby version
+3. Kemudian kita buat model user dengan devise dengan perintah `rails g devise User`
 
-* System dependencies
+4. Di migration devise_create_user kita tambahkan field yang belum ada yaitu name dan level
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+t.string :name
+t.integer :level
+```
