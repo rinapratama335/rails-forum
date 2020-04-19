@@ -1,38 +1,61 @@
-# Membuat Forum Thread Dan Forum Post
+# Membuat Relasi Antar Tabel
 
-Kita buat model untuk forum thread, saat kita membuat model ini maka otomatis juga akan dibuatkan migrationnya
-
-````
-rails g model ForumThread title content:text sticky_order:integer user_id:integer
-      invoke  active_record
-      create    db/migrate/20200419175456_create_forum_threads.rb
-      create    app/models/forum_thread.rb
-      invoke    test_unit
-      create      test/models/forum_thread_test.rb
-      create      test/fixtures/forum_threads.yml
-      ```
-````
-
-Jalankan migrate untuk membuat tabel forum thread
+1. Model user
+   Kita beri relasi has_many untuk forum post dan forum thread
 
 ```
-rake db:migrate
+has_many :forum_threads
+has_many :forum_posts
 ```
 
-Kita buat lagi model untuk forum post,
+2. Model Forum Thred
 
 ```
-rails g model ForumPost content:text forum_thread_id:integer user_id:integer
-      invoke  active_record
-      create    db/migrate/20200419175937_create_forum_posts.rb
-      create    app/models/forum_post.rb
-      invoke    test_unit
-      create      test/models/forum_post_test.rb
-      create      test/fixtures/forum_posts.yml
+belongs_to :user
 ```
 
-Jalankan lagi migrate-nya
+3. Model Forum Post
 
 ```
-rake db:migrate
+belongs_to :user
+belongs_to :forum_thread
+```
+
+Sebagai percobaan kita akan membuat user dan thread denga menggunakan rails console
+
+```
+u = User.new
+u.name = "Irwanto Wibowo"
+u.email = "irwanto@yahoo.com"
+u.level = 1
+u.password = "<password di sini>"
+u.save
+
+t = ForumThread.new
+t.title = "Thread Pertama"
+t.content = "Content dari thread pertama yang dibuat"
+t.user = u
+t.save
+
+t.user.name
+"Irwanto Wibowo"
+
+t.forum_posts.count
+(0.6ms)  SELECT COUNT(*) FROM `forum_posts` WHERE `forum_posts`.`forum_thread_id` = 1
+0
+```
+
+```
+t = ForumThread.first
+
+p = ForumPost.new
+p.content = "tanggapan untuk thread pertama"
+p.user = User.first
+p.forum_thread = t
+
+p.save
+
+t.forum_posts.count
+(0.4ms)  SELECT COUNT(*) FROM `forum_posts` WHERE `forum_posts`.`forum_thread_id` = 1
+1
 ```
