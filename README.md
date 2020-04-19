@@ -1,14 +1,13 @@
-# KOnfigurasi Devise
+# Membuat Database dan Menjalankan Migration
 
-1. Install gem devise, bisa diletakkan di gemfile lalu lakukan install dengan mengetikkan `bundle install`
-
-2. Devise sudah terpasang, tinggal kita instal dengan mengetikkan perintah `rails g devise:install`
-
-3. Kemudian kita buat model user dengan devise dengan perintah `rails g devise User`
-
-4. Di migration devise_create_user kita tambahkan field yang belum ada yaitu name dan level
+Kita sudah membuat migration dan model user. Untuk menjalankan migrationnya kita buat databasenya terlebih dahulu :
 
 ```
-t.string :name
-t.integer :level
+rake db:create
+```
+
+Kemudian kita jalankan migrationnya
+
+```
+rake db:migrate
 ```
