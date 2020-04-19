@@ -1,61 +1,54 @@
-# Membuat Relasi Antar Tabel
+# Instalasi Bootstrap
 
-1. Model user
-   Kita beri relasi has_many untuk forum post dan forum thread
-
-```
-has_many :forum_threads
-has_many :forum_posts
-```
-
-2. Model Forum Thred
+Kita tambahkan `bootstrap-sass` di file gem kita
 
 ```
-belongs_to :user
+gem 'bootstrap-sass', '~> 3.4', '>= 3.4.1'
 ```
 
-3. Model Forum Post
+Kemudian install dengan menjalankan perintah `bundle`
+
+Selanjutnya kita ubah nama `application.css` yang ada di forlder assets/stylesheets menjadi `application.scss`, kemuadian di dalamnya kita tambahkan kode untuk load bootstrap-nya :
 
 ```
-belongs_to :user
-belongs_to :forum_thread
+@import "bootstrap-sprockets";
+@import "bootstrap";
 ```
 
-Sebagai percobaan kita akan membuat user dan thread denga menggunakan rails console
+sebagai percobaan kita akan menampilkan kode navbar yang diletakkan di view layout `application.html.erb` :
 
 ```
-u = User.new
-u.name = "Irwanto Wibowo"
-u.email = "irwanto@yahoo.com"
-u.level = 1
-u.password = "<password di sini>"
-u.save
-
-t = ForumThread.new
-t.title = "Thread Pertama"
-t.content = "Content dari thread pertama yang dibuat"
-t.user = u
-t.save
-
-t.user.name
-"Irwanto Wibowo"
-
-t.forum_posts.count
-(0.6ms)  SELECT COUNT(*) FROM `forum_posts` WHERE `forum_posts`.`forum_thread_id` = 1
-0
+.
+.
+kode navbar Bootstrap
+.
+.
 ```
 
+Jalankan server `localhost:3000`, dan whoalaaaaa......halaman default yang tampil :)
+Mari kita atasi dengan langkah awal membuta controller (kasih saja namanya `home`). Di dalam controller home ini kita bikin method index :
+
 ```
-t = ForumThread.first
-
-p = ForumPost.new
-p.content = "tanggapan untuk thread pertama"
-p.user = User.first
-p.forum_thread = t
-
-p.save
-
-t.forum_posts.count
-(0.4ms)  SELECT COUNT(*) FROM `forum_posts` WHERE `forum_posts`.`forum_thread_id` = 1
-1
+class HomeController < ApplicationController
+  def index
+  end
+end
 ```
+
+Buat view home dan di dalamnya buat file `index.html.erb`, isi aja sederhana :
+
+```
+<div>
+  Halooo
+</div>
+```
+
+Kemudian kita buat routingnya :
+
+```
+root "home#index"
+```
+
+routing di atas artinya adalah saat kit akses `localhost:300` maka akan diarahkan ke controller home method index.
+
+Dan silahkan liat hasilnya.
