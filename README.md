@@ -1,30 +1,17 @@
-# Thread List Dari Database
+# Localiation
 
-1. Buat controller untuk menangani threads, `forum_threads_controller`. Di dalam controller tersebut buat method index untuk mengambil semua data
+Secara default bahasa yang digunakan di Rails adalah bahasa inggris. Bagaimna jika kita ingin menggunkana bahasa indonesia??
 
-2. Di view index kita lakukan perulangan seperi ini
-
-```
-<% @threads.each do |t|%>
-<div class="thread">
-    <h3 class="title"><%= t.title.titleize %></h3>
-
-    <div class="meta"><%= t.created_at.strftime("%d %B %Y") %> Oleh <%= t.user.name %></div>
-
-    <div class="content">
-        <%= t.content %>
-    </div>
-
-    <div class="count">
-        <%= t.forum_posts.count %> Obrolan
-    </div>
-    <div style="clear: both"></div>
-</div>
-<% end %>
-```
-
-3. Untuk route `root`nya kita ganti ke forum_thread
+1. Masuk ke file `config/applicatin.rb`, kita tambahkan kode berikut ini di dalam module Forum class Application
 
 ```
-root "forum_threads#index"
+config.i18n.default_locale = :id
+```
+
+2. Lalu kita buat file di dalam folder `locales` dengan nama `id.yml`, untuk isinya dapat diliat di dalam filenya
+
+3. Kita setting tampilan tanggal di file view forum_threads/index.html.erb menjadi seperti ini :
+
+```
+<%= I18n.l(t.created_at.to_date) %>
 ```
