@@ -2,7 +2,7 @@
     <div class="column is-half is-offset-one-quarter">
         <% @threads.each do |t|%>
         <div class="thread">
-            <h3 class="title"><%= t.title.titleize %></h3>
+            <h3 class="title"><%= link_to t.title.titleize, forum_thread_path(t) %></h3>
 
             <div class="meta"><%= I18n.l(t.created_at.to_date) %> Oleh <%= t.user.name %></div>
 

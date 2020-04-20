@@ -1,0 +1,32 @@
+<div class="columns is-mobile">
+    <div class="column is-half is-offset-one-quarter">
+        <div class="thread">
+            <h3 class="title"><%= @thread.title.titleize %></h3>
+
+            <div class="meta"><%= I18n.l(@thread.created_at.to_date) %> Oleh <%= @thread.user.name %></div>
+
+            <div class="content">
+                <%= @thread.content %>
+            </div>
+        </div>
+
+        <% if @thread.forum_posts.any? %>
+        <% @thread.forum_posts.each do |p| %>
+        <div class="thread">
+
+            <div class="meta"><%= I18n.l(p.created_at.to_date) %> Oleh <%= p.user.name %></div>
+
+            <div class="content">
+                <%= p.content %>
+            </div>
+        </div>
+        <% end %>
+        <% else %>
+        <div>
+            Jadilah yang pertama memberi tanggapan
+        </div>
+        <% end %>
+
+
+    </div>
+</div>
