@@ -27,6 +27,17 @@
         </div>
         <% end %>
 
+        <% if @post.errors.any? %>
+        <div>
+            <% @post.errors.full_messages.each do |error| %>
+            <div class="notification is-danger">
+                <button class="delete"></button>
+                <%= error %>
+            </div>
+            <% end %>
+        </div>
+        <% end %>
+
         <%= form_for [@thread, @post] do |f| %>
         <div class="field">
             <%= f.label :content, class: "label" %>
