@@ -15,11 +15,10 @@ class ForumThreadsController < ApplicationController
         @thread = ForumThread.new(resource_params)
         @thread.user = User.first
         if @thread.save
-            puts "Berhasil Disimpan"
+            redirect_to root_path
         else
-            puts @thread.errors.full_messages
+            render 'new'
         end
-        redirect_to root_path
     end
 
     private
