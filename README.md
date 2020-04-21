@@ -1,32 +1,33 @@
-# Membuat Form New Thread
+# Menyimpan Data Thread Ke Database
 
-1. Di index thread kita biki link untuk menambahkan thread baru
-
-```
-<%= link_to 'Buat Thread', new_forum_thread_path, class: 'button is-primary' %>
-```
-
-2. Kemudian di routes kita forum thread kita tambahakan untuk method new dan create
+1. Kita buat method create di forum thread controller
 
 ```
-resources :forum_threads, only: [:show, :new, :create]
-```
-
-3. Lalu kita buat method new di controller forum thread
-
-```
-def new
-    @thread = ForumThread.new
+def create
+    @thread = ForumThread.new(resource_params)
+    @thread.user = User.first
+    if @thread.save
+        puts "Berhasil Disimpan"
+    else
+        puts @thread.errors.full_messages
+    end
+    redirect_to root_path
 end
 ```
 
-4. Terakhir kita buat view untuk tambah data thread
+2. Kemudian kita buat method resources params
 
 ```
-<%= form_for @thread do |f| %>
-    .
-    .
-    .
-    .
-<% end %>
+private
+def resource_params
+    params.require(:forum_thread).permit(:title, :content)
+end
+```
+
+3. Untuk menampilkan data forum thread berdasarkan thread terbaru maka di method index kita buat tampilan data bersasarkan id secara descending
+
+```
+def index
+    @threads = ForumThread.order(id: :desc)
+end
 ```

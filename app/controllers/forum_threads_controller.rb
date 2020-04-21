@@ -1,6 +1,6 @@
 class ForumThreadsController < ApplicationController
     def index
-        @threads = ForumThread.all
+        @threads = ForumThread.order(id: :desc)
     end
 
     def show
@@ -9,5 +9,21 @@ class ForumThreadsController < ApplicationController
 
     def new
         @thread = ForumThread.new
+    end
+
+    def create
+        @thread = ForumThread.new(resource_params)
+        @thread.user = User.first
+        if @thread.save
+            puts "Berhasil Disimpan"
+        else
+            puts @thread.errors.full_messages
+        end
+        redirect_to root_path
+    end
+
+    private
+    def resource_params
+        params.require(:forum_thread).permit(:title, :content)
     end
 end
