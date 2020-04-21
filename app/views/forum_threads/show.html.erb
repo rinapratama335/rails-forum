@@ -27,6 +27,19 @@
         </div>
         <% end %>
 
+        <%= form_for [@thread, @post] do |f| %>
+        <div class="field">
+            <%= f.label :content, class: "label" %>
+            <div class="control">
+                <%= f.text_area :content, class: "textarea", placeholder: "Entry content" %>
+            </div>
+        </div>
 
+        <div class="field is-grouped">
+            <div class="control">
+                <%= f.button :simpan, class: "button is-link" %>
+            </div>
+        </div>
+        <% end %>
     </div>
 </div>
