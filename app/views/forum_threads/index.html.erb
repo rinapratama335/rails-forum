@@ -1,5 +1,7 @@
 <div class="columns is-mobile">
     <div class="column is-half is-offset-one-quarter">
+        <%= link_to 'Buat Thread', new_forum_thread_path, class: 'button is-primary' %>
+
         <% @threads.each do |t|%>
         <div class="thread">
             <h3 class="title"><%= link_to t.title.titleize, forum_thread_path(t) %></h3>
