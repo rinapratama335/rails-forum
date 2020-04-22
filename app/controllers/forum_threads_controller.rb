@@ -1,4 +1,6 @@
 class ForumThreadsController < ApplicationController
+    before_action :authenticate_user!, only: [:new, :create]
+
     def index
         @threads = ForumThread.order(id: :desc)
     end

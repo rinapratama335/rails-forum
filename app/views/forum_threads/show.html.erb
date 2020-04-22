@@ -38,6 +38,7 @@
         </div>
         <% end %>
 
+        <% if user_signed_in? %>
         <%= form_for [@thread, @post] do |f| %>
         <div class="field">
             <%= f.label :content, class: "label" %>
@@ -51,6 +52,7 @@
                 <%= f.button :simpan, class: "button is-link" %>
             </div>
         </div>
+        <% end %>
         <% end %>
     </div>
 </div>
