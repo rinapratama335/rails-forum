@@ -1,25 +1,3 @@
-# Conditional Rendering Untuk User Menu
+# Registrasi, Login dan Logout
 
-Di navbar bagian login, register dan logout kita perkondisian dengan kode seperti ini :
-
-```
-<div class="navbar-end">
-    <div class="navbar-item"><%= user_signed_in? ? current_user.name : 'Hello, Guest' %></div>
-    <% if user_signed_in? %>
-        <div class="navbar-item">
-            <div class="buttons">
-                <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "button is-danger" %>
-            </div>
-        </div>
-    <% else %>
-        <div class="navbar-item">
-            <div class="buttons">
-                <%= link_to "Sign Up", new_user_registration_path, class: "button is-primary" %>
-                <%= link_to "Sign In", new_user_session_path, class: "button is-primary" %>
-            </div>
-        </div>
-    <% end %>
-</div>
-```
-
-Method `user_signed_in?` adalah method bawaan dari `devise` (di awal kita sudah memakai gem devise). Sedangkan `current_user` adalah method devise yang digunakan untuk mengambil user yang sedang login.
+Saya ucapkan pada `devise` karena dengan gem ini sejatinya kita sudah diberikas sistem untuk registrasi, login, serta logout. Sebenarnya tanpa kita melakukan apa-apa (hanya memberikan path saat kita membuat navigasi navbar) kita sudah bisa menjalankan fitur register, login serta logout. Hanya saja ada beberapa yang perlu kita perbaikai. Yang pertama tentu saja tampilannya, yang kedua adalah pada saat register kita akan menambahkan satu field form yaitu `nama`. Selebihnya sudah diatur oleh `devise` ini.
