@@ -1,14 +1,3 @@
-# Membuat Notice Dan Alert
+# Devise Locale
 
-Di awal kita memakai devise memang sudah disarankan untuk membuat notice, untuk itu kita bisa buat niticenya di file view layout `application.html.erb` dengan menambahkan kode berikut :
-
-```
-<% flash.each do |key, value| %>
-    <div class="notification is-<%= key %>">
-        <button class="delete"></button>
-        <%= value %>
-    </div>
-<% end %>
-```
-
-Kode di atas bisa kita letakkan di body sebelum `yield`
+Di materi sebelumnya kita sudah membuat notifikasi dan alert, namun terdapat suatu kesalahan yaitu error translation. Nah kita bisa mengatasinya dengan membuat file di forlder `config/locales` dengan nama `devise.id.yml`. Sebenarnya isi dari file tersebut adalah file dari `devise.en.yml` yang kita terjemahkan ke bahasa indonesia saja (bisa dilihat di file-nya).
