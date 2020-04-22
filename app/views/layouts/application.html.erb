@@ -88,6 +88,13 @@
         </div>
     </nav>
 
+    <% flash.each do |key, value| %>
+    <div class="notification is-<%= key %>">
+        <button class="delete"></button>
+        <%= value %>
+    </div>
+    <% end %>
+
     <%= yield %>
 
     <script>
