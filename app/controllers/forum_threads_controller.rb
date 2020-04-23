@@ -24,6 +24,12 @@ class ForumThreadsController < ApplicationController
         end
     end
 
+    def pinit
+        @thread = ForumThread.find(params[:id])
+        @thread.pinit!
+        redirect_to root_path
+    end
+
     private
     def resource_params
         params.require(:forum_thread).permit(:title, :content)

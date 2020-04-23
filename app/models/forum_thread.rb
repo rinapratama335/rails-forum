@@ -8,4 +8,9 @@ class ForumThread < ApplicationRecord
   def sticky?
     sticky_order != 100
   end
+
+  def pinit!
+    self.sticky_order = 1
+    self.save
+  end
 end
