@@ -1,35 +1,20 @@
-# View Authorization
+# Redirect When No Access
 
-Di sini kita akan membahas bagaimana kita akan menampilkan button edit jika user yang login adalah yang memiliki hak akses tersebut.
+Walaupun kita sudah berhasil membuat authorization untuk edit ini, tetapi bisa ada yang mengakses melalui url maka rails akan mengeluarkan exception. Tentunya tidak enak dibaca oleh user yang mengaksesnya karena ada pesan error di web.
 
-1. Pertama kita tambahkan authorization pada method update thread karena hanya user yang membuat thread yang bisa melakukan update :
+Daripada exception itu muncul dan terkesan kurang profesion maka kita bisa melakukan redirect dengan mengalihkan halaman error tersebut ke halaman lain sembari kita bisa menambahkan pesan.
+
+Kita bisa melakukan penangan exception ini di tingkat controller di application_controller.
 
 ```
-def update
-    @thread = ForumThread.find(params[:id])
-    authorize @thread
-    .
-    .
-    .
+rescue_from Pundit::NotAuthorizedError, with: :pundit_error
+
+private
+def pundit_error
+    flash[:notice] = "Anda tidak memiliki hak akses ini"
+    redirect_to root_path
 end
 ```
 
-2. Kita buat method `update?` di forum_thread_policy
-
-```
-def update?
-    user.id == record.user.id
-end
-```
-
-3. Kita buat perkondisian di show.html.erb untuk menampilkan button edit
-
-```
-<% if policy(@thread).edit? %>
-    <div class="action-edit">
-        <%= link_to "Edit", edit_forum_thread_path(@thread), class: "button is-warning" %>
-    </div>
-<% end %>
-```
-
-kode ini bisa dibaca jika user yang login memiliki hak akses (policy) untuk mengedit(edit?) record @thread maka munculkan button edit, jika tidak maka hilangkan tombol editnya.
+Jadi yang kita lakukan adalah jika ada exception `Pundit::NotAuthorizedError` kita akan menganganinya (rescue) dengan memanggil method `pundit_error`.
+Method `pundit_error` bersifat private. Method ini akan mengalihkan ke `root_path` dengan memberika satu pesan (`flash[:notice]`)
