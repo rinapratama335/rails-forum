@@ -32,6 +32,8 @@ class ForumThreadsController < ApplicationController
 
     def update
         @thread = ForumThread.find(params[:id])
+        authorize @thread
+        
         if @thread.update(resource_params)
             redirect_to forum_thread_path(@thread)
         else
