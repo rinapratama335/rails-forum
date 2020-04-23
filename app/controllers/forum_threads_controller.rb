@@ -2,7 +2,7 @@ class ForumThreadsController < ApplicationController
     before_action :authenticate_user!, only: [:new, :create]
 
     def index
-        @threads = ForumThread.order(id: :desc)
+        @threads = ForumThread.order(sticky_order: :asc).order(id: :desc)
     end
 
     def show
