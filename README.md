@@ -1,49 +1,32 @@
-# Membuat Custom Field Devise
+# Membuat Friendly ID
 
-Tentunya kita masih ingat saat kita melakukan pendaftara ada satu field yang belum kita tambahkan yaitu `nama`, sehingga di saat kita melakukan pendaftaran kolom nama akan selalu nil/tidak ada namanya.
+Jika kita akses suatu tread, maka yang akan ditampilkan adalah `thread/id`. Namun kali ini adalah kita akan membuat url yang id-nya lebih menarik dengan menggunkana friendly ID. Jadi daripada kita seperti ini `http://localhost:3000/forum_threads/2` akan kita buat menjadi `http://localhost:3000/forum_threads/judul-thread-yang-dibuat`.
 
-Pertama tambahkan field nama di `views/devise/registrations/new.html.erb`
-
-```
-<div class="field">
-    <%= f.label :name, class: 'label' %>
-    <div class="control">
-        <%= f.text_field :name, class: "input", autofocus: true, autocomplete: "email" %>
-    </div>
-</div>
-```
-
-Permasalahan yang muncul adalah field nama ini adalah bukan standart dari devise karena kita membuatnya sendiri.
-Cara yang dapat kita pakai adalah kita membuat `strong parameter`. Strong parameter adalah kita menentuka field mana saja yang boleh kita terima.
-Contoh strong parameter adalah resources prameter yang kita buat untuk menghandle data di method create dan update
-
-Nah permasalahan lagi yang terjadi adalah dimanakah kita bisa menemukan controller devise? Kan tidak ada controller devise nya??
-
-Nah kita bisa membuat strong parameter untuk menghandle devise ini dengan beberapa cara. Salah satunya adalah kita membuat strong parameter di `application_controller`. Dan kode strong parameternya adalah :
+Di rails terdapat gem yang bisa menghandle kasus di atas, namanya adalah `friendly_id`. Kita install gemnya dengan menambahkan kode berikut di `Gemfile`.
 
 ```
-class ApplicationController < ActionController::Base
-    .
-    .
-    .
-
-    before_action :configure_permited_parameters, if: :devise_controller?
-
-    private
-    .
-    .
-    .
-
-    def configure_permited_parameters
-        devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
-    end
-end
+gem 'friendly_id', '~> 5.3'
 ```
 
-`before_action :configure_permited_parameters, if: :devise_controller?` artinya kita buat callback di `before_action` dengan method bernama `configure_permited_parameters` yang mana akan dijalankan jika controller yang kita akses adalah controller yang dibuat oleh devise (`if: :devise_controller?`) bukan controller yang kita buat sendiri.
+kemudian jalankan instalasinya dengan mengetikkan perintah `bundle`
 
-Isi dari method `configure_permited_parameters` adalah method bawaan devise yang bernama `devise_parameter_sanitizer`. Method devise ini akan melakukan permit pada saat `sign_up` dan value yang bisa disimpan adalah `name`. Sehingga kita bisa tulus kodenya seperti ini :
+Selanjutnya kita menuju model forum_thread, tambahkan kode berikut :
 
 ```
-devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+extend FriendlyId
+friendly_id :title, use: :slugged
 ```
+
+Kita extend FriandlyId-nya dan kita implementasikan dengan membuat friendly id berdasarkan title-nya
+
+Yang tidak kalah penting adalah ketika kita memakai friendly id maka kita butuh kolom yang namanya `slug` di tabel kita, untuk itu kita buat migrationnya :
+
+```
+ rails g migration add_slug_to_forum_threads slug:string
+      invoke  active_record
+      create    db/migrate/20200423202325_add_slug_to_forum_threads.rb
+```
+
+Lalu jalankan migrasinya.
+
+Terakhir kita implementasikan friendly id ini di forum thread tepatnya di controller forum thread. Kita ubah kodenya dari yang semula `@thread = ForumThread.find(params[:id])` menjadi `@thread = ForumThread.friendly.find(params[:id])`. Dan itu dilakukan di semua method yang memerlukan method `find` (show, edit, update, pinit)
