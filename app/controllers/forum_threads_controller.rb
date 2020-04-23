@@ -26,6 +26,8 @@ class ForumThreadsController < ApplicationController
 
     def edit
         @thread = ForumThread.find(params[:id])
+
+        authorize @thread
     end
 
     def update
