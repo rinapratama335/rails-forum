@@ -1,41 +1,43 @@
-# Membuat Sticky Thread Action
+# Edit Thread
 
-Kali ini kita akan buat tombol untuk untuk mengupdate stycky_order sebuah thread.
-
-Pertama buat terlebih dahulu method-nya, di controller forum thread :
+1. Buat tombol edit di file show
 
 ```
-def pinit
-    @thread = ForumThread.find(params[:id])
-    @thread.pinit!
-    redirect_to root_path
-end
+<div class="action-edit">
+    <%= link_to "Edit", edit_forum_thread_path(@thread), class: "button is-warning" %>
+</div>
 ```
 
-`@thread.pinit!` artinya memanggil method `pinit!` di model forum thread yang isinya adalah :
+Untuk CSS disesuaikan sendiri ya.
+
+2. Di routes kita update dengan menambahkan method edit dan update
 
 ```
-def pinit!
-    self.sticky_order = 1
-    self.save
-end
-```
-
-Karena method `pinit` di controller di atas bukan method yang sewajarnya maka di routenya juga harus dibuat secara manual, dan ini dimasukkan ke dalam resource `:forum_threads` :
-
-```
-resources :forum_threads, only: [:show, :new, :create] do
+resources :forum_threads, only: [:show, :new, :create, :edit, :update] do
     put :pinit, on: :member
     resource :forum_posts, only: [:create]
 end
 ```
 
-`put :pinit, on: :member` ini disebut member route. `:member` artinya method ini berlaku pada satu data tertentu. Makanya jika kita lihat para route paramsnya akan seperti ini : `/forum_threads/:id/pinit`. Dia kan memberikan `:id` pada thread yang akan kita pinit.
-
-Kemudian tinggal kita buat button-nya deh.
+3. Di forum thread controller kita buat method dengan nama edit dan update
 
 ```
-<div class="action">
-    <%= link_to "Pin It", pinit_forum_thread_path(t), class: "button is-primary", method: :put %>
-</div>
+def edit
+    @thread = ForumThread.find(params[:id])
+end
+
+def update
+    @thread = ForumThread.find(params[:id])
+    if @thread.update(resource_params)
+        redirect_to forum_thread_path(@thread)
+    else
+        render 'edit'
+    end
+end
+```
+
+4. Kemudian tinggal kita buat formnya, yang saya lakukan adalah membuat form partian dengan nama `_form.html.erb` yang isinya saya ambil dari form `new` sebelumnya. Kenapa saya pindahkan? karena form `new` maupun `edit` itu sama persis, jadi lebih baik bikin satu file untuk dipanggil di manapun bisa (kasusnya adalah `new` dan `edit`).
+
+```
+<%= render 'form' %>
 ```
