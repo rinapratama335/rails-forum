@@ -16,3 +16,8 @@
   margin-bottom: 50px;
   border-bottom: 1px solid black;
 }
+
+.action {
+  float: left;
+  margin-bottom: 15px;
+}
