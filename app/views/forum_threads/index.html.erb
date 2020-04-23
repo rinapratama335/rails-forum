@@ -17,7 +17,7 @@
             <div class="meta"><%= I18n.l(t.created_at.to_date) %> Oleh <%= t.user.name %></div>
 
             <div class="content">
-                <%= t.content %>
+                <%= truncate t.content, length: 150 %>
             </div>
 
             <div class="action">
