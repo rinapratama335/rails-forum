@@ -1,5 +1,5 @@
 class ForumThreadsController < ApplicationController
-    before_action :authenticate_user!, only: [:new, :create]
+    before_action :authenticate_user!, only: [:new, :create, :edit, :update]
 
     def index
         @threads = ForumThread.order(sticky_order: :asc).order(id: :desc)
@@ -21,6 +21,19 @@ class ForumThreadsController < ApplicationController
             redirect_to root_path
         else
             render 'new'
+        end
+    end
+
+    def edit
+        @thread = ForumThread.find(params[:id])
+    end
+
+    def update
+        @thread = ForumThread.find(params[:id])
+        if @thread.update(resource_params)
+            redirect_to forum_thread_path(@thread)
+        else
+            render 'edit'
         end
     end
 

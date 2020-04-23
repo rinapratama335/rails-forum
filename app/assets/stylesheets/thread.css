@@ -21,3 +21,8 @@
   float: left;
   margin-bottom: 15px;
 }
+
+.action-edit {
+  float: none;
+  margin-bottom: 15px;
+}

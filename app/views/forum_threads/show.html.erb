@@ -8,6 +8,10 @@
             <div class="content">
                 <%= @thread.content %>
             </div>
+
+            <div class="action-edit">
+                <%= link_to "Edit", edit_forum_thread_path(@thread), class: "button is-warning" %>
+            </div>
         </div>
 
         <% if @thread.forum_posts.any? %>
