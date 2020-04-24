@@ -7,6 +7,8 @@ class ForumThreadsController < ApplicationController
         else
             @threads = ForumThread.order(sticky_order: :asc).order(id: :desc).paginate(per_page: 5, page: params[:page])
         end
+
+        authorize @threads
     end
 
     def show
