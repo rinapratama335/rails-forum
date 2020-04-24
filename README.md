@@ -1,19 +1,36 @@
-# Level Admin Bisa Edit Thread
+# Delete Thread Dependent
 
-Jika fitur sebelumnya edit thread hanya bisa dilakukan oleh member yang membuat thread, maka kali ini akan kita tambahkan dengan admin. Jadi yang bisa mengedit thread adalah user yang membuat thread dan juga admin.
+Tentunya di dalam forum thread ini harus ada fungsi untuk menghapus forum thread ini. Dan pada kasus ini yang bisa melakukan itu adalah admin.
 
-Kita sudah memili enum untuk menentuka admin dan member di materi sebekumnya, sekarang kita bisa implementasikan pada kasus forum thread ini.
+Namun yang harus kita pikirkan adalah pada saat kita menghapus fourm thread maka forum post juga harus ikut terhapus karena jika tidak akan terjadi kepincangan (ada data post namun threadnya tidak ada).
 
-Yang perlu kita lakukan adalah kita mennambahkan pengecekan apakah user adalah admin atau bukan. Pengecekan ini kita lakukan di `forum_thread_policy`, jadi mari kita tambahkan kodenya :
+Untuk itu kita bisa memanfaatkan satu method yaitu `dependent destroy`. Jadi dengan menggunakan method ini pada saat kita menghapus data induk maka data anak akan ikut terhapus juga.
+
+Bagaimana melakukannya???
+
+Untuk melannya kita bisa menambahkan method `dependent` ini di model forum thread seperti ini :
 
 ```
-def edit?
-    user.id == record.user.id || user.admin?
-end
-
-def update?
-    user.id == record.user.id || user.admin?
-end
+has_many :forum_posts, dependent: :destroy
 ```
 
-Dengan menambahkan `user.admin?` maka rails akan melakukan cek apakah user adalah admin atau bukan. `admin?` sidah kita jelaskan pada pembahasa sebelumnya kalai ini didapatka secara otomatis saat kita membuat enum.
+Method dependent ini kita letakkan di relasi post. Jadi ketika thread dihapus maka relasi yang berhubungan dengan thread tersebut akan terhapus juga( dalam kasus ini adalah post).
+
+Bisa kita test di console :
+
+```
+t = ForumThread.find 1
+ForumThread Load (0.5ms)  SELECT `forum_threads`.* FROM `forum_threads` WHERE `forum_threads`.`id` = 1 LIMIT 1
+=> #<ForumThread id: 1, title: "Thread Pertama", content: "Content untuk thread pertama yang baru dibuat", sticky_order: 1, user_id: 1, created_at: "2020-04-19 18:15:07", updated_at: "2020-04-19 18:15:07", forum_posts_count: 2, slug: nil>
+
+t.destroy
+(0.2ms)  BEGIN
+ForumPost Load (0.4ms)  SELECT `forum_posts`.* FROM `forum_posts` WHERE `forum_posts`.`forum_thread_id` = 1
+ForumPost Destroy (2.2ms)  DELETE FROM `forum_posts` WHERE `forum_posts`.`id` = 1
+ForumPost Destroy (0.4ms)  DELETE FROM `forum_posts` WHERE `forum_posts`.`id` = 2
+ForumThread Destroy (0.3ms)  DELETE FROM `forum_threads` WHERE `forum_threads`.`id` = 1
+(4.3ms)  COMMIT
+=> #<ForumThread id: 1, title: "Thread Pertama", content: "Content untuk thread pertama yang baru dibuat", sticky_order: 1, user_id: 1, created_at: "2020-04-19 18:15:07", updated_at: "2020-04-19 18:15:07", forum_posts_count: 2, slug: nil>
+```
+
+Dari console di atas dapat kita lihat pada saat kita menghapus thread(t.destriy) maka sebelum thread dihapus data post terlebih dahulu yang akan dihapus.
