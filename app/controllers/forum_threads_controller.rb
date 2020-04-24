@@ -41,6 +41,15 @@ class ForumThreadsController < ApplicationController
         end
     end
 
+    def destroy
+        @thread = ForumThread.friendly.find(params[:id])
+        authorize @thread
+
+        @thread.destroy
+
+        redirect_to root_path, notice: 'Thread telah dihapus'
+    end
+
     def pinit
         @thread = ForumThread.friendly.find(params[:id])
         @thread.pinit!
