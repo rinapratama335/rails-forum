@@ -28,47 +28,23 @@
 
         <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item">
-                    Home
-                </a>
-
-                <a class="navbar-item">
-                    Documentation
-                </a>
-
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        More
-                    </a>
-
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item">
-                            About
-                        </a>
-                        <a class="navbar-item">
-                            Jobs
-                        </a>
-                        <a class="navbar-item">
-                            Contact
-                        </a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item">
-                            Report an issue
-                        </a>
-                    </div>
-                </div>
+                <%= link_to "Thread", root_path, class: "navbar-item" %>
             </div>
 
-            <div class="field is-grouped navbar-item">
-                <p class="control is-expanded">
-                    <input class="input" type="text" placeholder="Find a repository">
-                </p>
-                <p class="control">
-                    <a class="button is-primary">
-                        Search
-                    </a>
-                </p>
-            </div>
+
+            <%= form_tag root_path, method: :get, class: "field is-grouped navbar-item" do %>
+            <p class="control is-expanded">
+                <%# <input class="input" type="text" placeholder="Find a repository"> %>
+                <%= text_field_tag :search, nil, class: "input" %>
+            </p>
+            <p class="control">
+                <%# <a class="button is-primary">
+                    Search
+                </a> %>
+                <%= submit_tag "Search", class: "button is-primary" %>
+            </p>
+            <% end %>
+
 
             <div class="navbar-end">
                 <div class="navbar-item"><%= user_signed_in? ? current_user.name : 'Hello, Guest' %></div>
