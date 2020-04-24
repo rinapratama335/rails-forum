@@ -1,48 +1,27 @@
-# Implementasi Delete Thread Dependent
+# Pagination
 
-Pembahasan ini adalah implementasi dari apa yang sudah kita buat sebelumnya, yaitu delete thread dependent. Nah yang akan kita lakukan adalah membuat button delete dan menggunakan fungsi delete dapat bekerja di situ.
+Kali ini kita akan belajar hal baru yaitu tentang paginasi. Paginasi ini menurut saya adalah sesuatu yang penting untuk kita terapkan.
 
-1. Buat button hapusnya
+Bayangkan apabila kita memiliki ratusan thread yang sudah ada dan itu ditampilkan semua. Selain itu akan memperlambat website karena kita me-load data sekaligus, user juga aka kerepotan karen scrol terus menerus.
 
-```
-<div class="action-edit">
-    .
-    .
-    <%= link_to "Delete", forum_thread_path(@thread), class: "button is-warning", data: {confirm: 'Anda yakin mau menghapus?'}, method: :delete %>
-</div>
-```
-
-2. Di route kita tambahakan destroy
+1. Instal gem will_paginate
 
 ```
-resources :forum_threads, only: [:show, :new, :create, :edit, :update, :destroy] do .....
-.
-.
+gem 'will_paginate', '~> 3.3'
 ```
 
-3. Masuk ke forum threads controller, kita tambah method destroy
+2. Kita apply paginate ke dalam forum treads controller pada method index
 
 ```
-def destroy
-    @thread = ForumThread.friendly.find(params[:id])
-    authorize @thread
-
-    @thread.destroy
-
-    redirect_to root_path, notice: 'Thread telah dihapus'
-end
+@threads = ForumThread.order(sticky_order: :asc).order(id: :desc).paginate(per_page: 5, page: params[:page])
 ```
 
-4. Karena yang bisa melakukan hapus adalah hanya admin, maka di forum thread policy kita buat method untuk mengecek apakah yang melakukan destriy ini admin atau bukan
+Ini artinya adalah kita membuat paginate dengan tampilan data per page adalah 5 (`perpage: 5`). parameter `page: params[:page]` adalah untuk penomoran halaman. Jadi saat kita ada di page pertama dan ingin berpindah ke page kedua maka parameter tersebut akan menghandle-nya.
+
+3. Kita panggil will_paginate di halaman index.html.erb views forum thread
 
 ```
-def destroy?
-    user.admin?
-end
+<%= will_paginate @threads %>
 ```
 
-5. Sakalian jangan lupa untuk mengupdate kode untuk create post dengan menambahkan friendly_id karena pada materi sebelumnya kita terlewat
-
-```
-@thread = ForumThread.friendly.find(params[:forum_thread_id])
-```
+`@thread` di sini adalah nama object yang kita buat saat di controller yang kita bikin pagination-nya.
