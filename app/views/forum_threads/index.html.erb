@@ -2,32 +2,36 @@
     <div class="column is-half is-offset-one-quarter">
 
         <% if user_signed_in? %>
-        <%= link_to 'Buat Thread', new_forum_thread_path, class: 'button is-primary' %>
+        <%= link_to 'Buat Thread', new_forum_thread_path, class: 'button is-info is-fullwidth add-thread' %>
         <% end %>
 
         <% @threads.each do |t|%>
-        <div class="thread">
-            <h4 class="title is-4">
-                <%= link_to t.title.titleize, forum_thread_path(t) %>
-                <% if t.sticky? %>
-                <i class="fas fa-thumbtack"></i>
-                <% end %>
-            </h4>
+        <div class="card">
+            <div class="card-content">
+                <div class="thread">
+                    <h4 class="title is-4 has-text-centered">
+                        <%= link_to t.title.titleize, forum_thread_path(t) %>
+                        <% if t.sticky? %>
+                        <i class="fas fa-thumbtack"></i>
+                        <% end %>
+                    </h4>
 
-            <div class="meta"><%= I18n.l(t.created_at.to_date) %> Oleh <%= t.user.name %></div>
+                    <div class="meta"><%= I18n.l(t.created_at.to_date) %> Oleh <%= t.user.name %></div>
 
-            <div class="content">
-                <%= truncate t.content, length: 150 %>
+                    <div class="content has-text-justified">
+                        <%= truncate t.content, length: 150 %>
+                    </div>
+
+                    <div class="action">
+                        <%= link_to "Pin It", pinit_forum_thread_path(t), class: "button is-primary", method: :put %>
+                    </div>
+
+                    <div class="count">
+                        <%= t.forum_posts_count %> Obrolan
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
             </div>
-
-            <div class="action">
-                <%= link_to "Pin It", pinit_forum_thread_path(t), class: "button is-primary", method: :put %>
-            </div>
-
-            <div class="count">
-                <%= t.forum_posts_count %> Obrolan
-            </div>
-            <div style="clear: both"></div>
         </div>
         <% end %>
 

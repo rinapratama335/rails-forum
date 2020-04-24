@@ -14,7 +14,6 @@
 
 .thread {
   margin-bottom: 50px;
-  border-bottom: 1px solid black;
 }
 
 .action {
@@ -24,5 +23,13 @@
 
 .action-edit {
   float: none;
+  margin-bottom: 15px;
+}
+
+.add-thread {
+  margin-bottom: 20px;
+}
+
+.card {
   margin-bottom: 15px;
 }
