@@ -1,20 +1,24 @@
 <div class="columns is-mobile">
     <div class="column is-half is-offset-one-quarter">
-        <div class="thread">
-            <h3 class="title"><%= @thread.title.titleize %></h3>
+        <div class="card">
+            <div class="card-content">
+                <div class="thread">
+                    <h3 class="title has-text-centered"><%= @thread.title.titleize %></h3>
 
-            <div class="meta"><%= I18n.l(@thread.created_at.to_date) %> Oleh <%= @thread.user.name %></div>
+                    <div class="meta"><%= I18n.l(@thread.created_at.to_date) %> Oleh <%= @thread.user.name %></div>
 
-            <div class="content">
-                <%= @thread.content %>
+                    <div class="content has-text-justified">
+                        <%= @thread.content %>
+                    </div>
+
+                    <% if policy(@thread).edit? %>
+                    <div class="action-edit">
+                        <%= link_to "Edit", edit_forum_thread_path(@thread), class: "button is-warning" %>
+                        <%= link_to "Delete", forum_thread_path(@thread), class: "button is-danger", data: {confirm: 'Anda yakin mau menghapus?'}, method: :delete %>
+                    </div>
+                    <% end %>
+                </div>
             </div>
-
-            <% if policy(@thread).edit? %>
-            <div class="action-edit">
-                <%= link_to "Edit", edit_forum_thread_path(@thread), class: "button is-warning" %>
-                <%= link_to "Delete", forum_thread_path(@thread), class: "button is-warning", data: {confirm: 'Anda yakin mau menghapus?'}, method: :delete %>
-            </div>
-            <% end %>
         </div>
 
         <% if @thread.forum_posts.any? %>
