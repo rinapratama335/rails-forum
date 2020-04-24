@@ -27,6 +27,7 @@ gem 'bulma-rails', '~> 0.8.0'
 gem 'pundit', '~> 2.1'
 gem 'friendly_id', '~> 5.3'
 gem 'will_paginate', '~> 3.3'
+gem 'will_paginate-bulma', '~> 1.0'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

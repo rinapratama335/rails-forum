@@ -31,6 +31,6 @@
         </div>
         <% end %>
 
-        <%= will_paginate @threads %>
+        <%= will_paginate @threads, renderer: BulmaPagination::Rails %>
     </div>
 </div>
