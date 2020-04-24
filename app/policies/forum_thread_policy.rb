@@ -10,8 +10,4 @@ class ForumThreadPolicy < ApplicationPolicy
     def destroy?
         user.admin?
     end
-
-    def pinit?
-        user.admin?
-    end
 end
