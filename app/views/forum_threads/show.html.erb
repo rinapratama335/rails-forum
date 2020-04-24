@@ -18,7 +18,7 @@
         </div>
 
         <% if @thread.forum_posts.any? %>
-        <% @thread.forum_posts.each do |p| %>
+        <% @posts.each do |p| %>
         <div class="thread">
 
             <div class="meta"><%= I18n.l(p.created_at.to_date) %> Oleh <%= p.user.name %></div>
@@ -28,6 +28,7 @@
             </div>
         </div>
         <% end %>
+        <%= will_paginate @posts, renderer: BulmaPagination::Rails %>
         <% else %>
         <div>
             Jadilah yang pertama memberi tanggapan

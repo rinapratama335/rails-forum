@@ -8,6 +8,8 @@ class ForumThreadsController < ApplicationController
     def show
         @thread = ForumThread.friendly.find(params[:id])
         @post = ForumPost.new
+
+        @posts = @thread.forum_posts.paginate(per_page: 4, page: params[:page])
     end
 
     def new
