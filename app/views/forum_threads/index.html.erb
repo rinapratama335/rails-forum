@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="action">
-                        <% if policy(@threads).pinit? %>
+                        <% if t.pinit? %>
                         <%= link_to "Pin It", pinit_forum_thread_path(t), class: "button is-primary", method: :put %>
                         <% end %>
                     </div>
