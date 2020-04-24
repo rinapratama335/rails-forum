@@ -6,4 +6,8 @@ class ForumThreadPolicy < ApplicationPolicy
     def update?
         user.id == record.user.id || user.admin?
     end
+
+    def destroy?
+        user.admin?
+    end
 end

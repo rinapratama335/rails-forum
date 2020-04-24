@@ -3,7 +3,7 @@ class ForumPostsController < ApplicationController
 
     def create
         # puts params.inspect
-        @thread = ForumThread.find(params[:forum_thread_id])
+        @thread = ForumThread.friendly.find(params[:forum_thread_id])
         @post = ForumPost.new(resource_params)
         
         @post.forum_thread = @thread

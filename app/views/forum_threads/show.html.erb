@@ -12,6 +12,7 @@
             <% if policy(@thread).edit? %>
             <div class="action-edit">
                 <%= link_to "Edit", edit_forum_thread_path(@thread), class: "button is-warning" %>
+                <%= link_to "Delete", forum_thread_path(@thread), class: "button is-warning", data: {confirm: 'Anda yakin mau menghapus?'}, method: :delete %>
             </div>
             <% end %>
         </div>

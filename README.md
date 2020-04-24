@@ -1,36 +1,48 @@
-# Delete Thread Dependent
+# Implementasi Delete Thread Dependent
 
-Tentunya di dalam forum thread ini harus ada fungsi untuk menghapus forum thread ini. Dan pada kasus ini yang bisa melakukan itu adalah admin.
+Pembahasan ini adalah implementasi dari apa yang sudah kita buat sebelumnya, yaitu delete thread dependent. Nah yang akan kita lakukan adalah membuat button delete dan menggunakan fungsi delete dapat bekerja di situ.
 
-Namun yang harus kita pikirkan adalah pada saat kita menghapus fourm thread maka forum post juga harus ikut terhapus karena jika tidak akan terjadi kepincangan (ada data post namun threadnya tidak ada).
-
-Untuk itu kita bisa memanfaatkan satu method yaitu `dependent destroy`. Jadi dengan menggunakan method ini pada saat kita menghapus data induk maka data anak akan ikut terhapus juga.
-
-Bagaimana melakukannya???
-
-Untuk melannya kita bisa menambahkan method `dependent` ini di model forum thread seperti ini :
+1. Buat button hapusnya
 
 ```
-has_many :forum_posts, dependent: :destroy
+<div class="action-edit">
+    .
+    .
+    <%= link_to "Delete", forum_thread_path(@thread), class: "button is-warning", data: {confirm: 'Anda yakin mau menghapus?'}, method: :delete %>
+</div>
 ```
 
-Method dependent ini kita letakkan di relasi post. Jadi ketika thread dihapus maka relasi yang berhubungan dengan thread tersebut akan terhapus juga( dalam kasus ini adalah post).
-
-Bisa kita test di console :
+2. Di route kita tambahakan destroy
 
 ```
-t = ForumThread.find 1
-ForumThread Load (0.5ms)  SELECT `forum_threads`.* FROM `forum_threads` WHERE `forum_threads`.`id` = 1 LIMIT 1
-=> #<ForumThread id: 1, title: "Thread Pertama", content: "Content untuk thread pertama yang baru dibuat", sticky_order: 1, user_id: 1, created_at: "2020-04-19 18:15:07", updated_at: "2020-04-19 18:15:07", forum_posts_count: 2, slug: nil>
-
-t.destroy
-(0.2ms)  BEGIN
-ForumPost Load (0.4ms)  SELECT `forum_posts`.* FROM `forum_posts` WHERE `forum_posts`.`forum_thread_id` = 1
-ForumPost Destroy (2.2ms)  DELETE FROM `forum_posts` WHERE `forum_posts`.`id` = 1
-ForumPost Destroy (0.4ms)  DELETE FROM `forum_posts` WHERE `forum_posts`.`id` = 2
-ForumThread Destroy (0.3ms)  DELETE FROM `forum_threads` WHERE `forum_threads`.`id` = 1
-(4.3ms)  COMMIT
-=> #<ForumThread id: 1, title: "Thread Pertama", content: "Content untuk thread pertama yang baru dibuat", sticky_order: 1, user_id: 1, created_at: "2020-04-19 18:15:07", updated_at: "2020-04-19 18:15:07", forum_posts_count: 2, slug: nil>
+resources :forum_threads, only: [:show, :new, :create, :edit, :update, :destroy] do .....
+.
+.
 ```
 
-Dari console di atas dapat kita lihat pada saat kita menghapus thread(t.destriy) maka sebelum thread dihapus data post terlebih dahulu yang akan dihapus.
+3. Masuk ke forum threads controller, kita tambah method destroy
+
+```
+def destroy
+    @thread = ForumThread.friendly.find(params[:id])
+    authorize @thread
+
+    @thread.destroy
+
+    redirect_to root_path, notice: 'Thread telah dihapus'
+end
+```
+
+4. Karena yang bisa melakukan hapus adalah hanya admin, maka di forum thread policy kita buat method untuk mengecek apakah yang melakukan destriy ini admin atau bukan
+
+```
+def destroy?
+    user.admin?
+end
+```
+
+5. Sakalian jangan lupa untuk mengupdate kode untuk create post dengan menambahkan friendly_id karena pada materi sebelumnya kita terlewat
+
+```
+@thread = ForumThread.friendly.find(params[:forum_thread_id])
+```
