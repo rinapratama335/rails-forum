@@ -13,7 +13,7 @@ class ForumThread < ApplicationRecord
   end
 
   def pinit?
-    user.level = 1
+    user.level == 1
   end
 
   def pinit!
