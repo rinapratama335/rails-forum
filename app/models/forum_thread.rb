@@ -12,10 +12,6 @@ class ForumThread < ApplicationRecord
     sticky_order != 100
   end
 
-  def pinit?
-    user.level == 1
-  end
-
   def pinit!
     self.sticky_order = 1
     self.save
