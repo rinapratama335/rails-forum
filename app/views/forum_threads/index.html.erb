@@ -35,12 +35,13 @@
             <% end %>
 
             <%= will_paginate @threads, renderer: BulmaPagination::Rails %>
+        <% else %>
+            <div>
+                <p>Selamat Datang Di Bulma Rails</p>
+                <p>Sebelum kamu bisa berkomunikasi, kau harus login dulu ya</p>
+                <hr>
+                <p>Silahkan klik tombol <b>Sign In</b> di menu atas</p>
+            </div>
         <% end %>
-        <div>
-            <p>Selamat Datang Di Bulma Rails</p>
-            <p>Sebelum kamu bisa berkomunikasi, kau harus login dulu ya</p>
-            <hr>
-            <p>Silahkan klik tombol <b>Sign In</b> di menu atas</p>
-        </div>
     </div>
 </div>
