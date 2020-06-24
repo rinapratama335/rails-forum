@@ -1,42 +1,46 @@
 <div class="columns is-mobile">
     <div class="column is-half is-offset-one-quarter">
-
         <% if user_signed_in? %>
-        <%= link_to 'Buat Thread', new_forum_thread_path, class: 'button is-info is-fullwidth add-thread' %>
-        <% end %>
+            <%= link_to 'Buat Thread', new_forum_thread_path, class: 'button is-info is-fullwidth add-thread' %>
+            <% @threads.each do |t|%>
+            <div class="card">
+                <div class="card-content">
+                    <div class="thread">
+                        <h4 class="title is-4 has-text-centered">
+                            <%= link_to t.title.titleize, forum_thread_path(t) %>
+                            <% if t.sticky? %>
+                            <i class="fas fa-thumbtack"></i>
+                            <% end %>
+                        </h4>
 
-        <% @threads.each do |t|%>
-        <div class="card">
-            <div class="card-content">
-                <div class="thread">
-                    <h4 class="title is-4 has-text-centered">
-                        <%= link_to t.title.titleize, forum_thread_path(t) %>
-                        <% if t.sticky? %>
-                        <i class="fas fa-thumbtack"></i>
-                        <% end %>
-                    </h4>
+                        <div class="meta"><%= I18n.l(t.created_at.to_date) %> Oleh <%= t.user.name %></div>
 
-                    <div class="meta"><%= I18n.l(t.created_at.to_date) %> Oleh <%= t.user.name %></div>
+                        <div class="content has-text-justified">
+                            <%= truncate t.content, length: 150 %>
+                        </div>
 
-                    <div class="content has-text-justified">
-                        <%= truncate t.content, length: 150 %>
+                        <div class="action">
+                            <% if current_user.try(:admin?) %>
+                            <%= link_to "Pin It", pinit_forum_thread_path(t), class: "button is-primary", method: :put %>
+                            <% end %>
+                        </div>
+
+                        <div class="count">
+                            <%= t.forum_posts_count %> Obrolan
+                        </div>
+                        <div style="clear: both"></div>
                     </div>
-
-                    <div class="action">
-                        <% if current_user.try(:admin?) %>
-                        <%= link_to "Pin It", pinit_forum_thread_path(t), class: "button is-primary", method: :put %>
-                        <% end %>
-                    </div>
-
-                    <div class="count">
-                        <%= t.forum_posts_count %> Obrolan
-                    </div>
-                    <div style="clear: both"></div>
                 </div>
             </div>
-        </div>
-        <% end %>
+            <% end %>
 
-        <%= will_paginate @threads, renderer: BulmaPagination::Rails %>
+            <%= will_paginate @threads, renderer: BulmaPagination::Rails %>
+        <% end %>
+        <div>
+            <p>Selamat Datang Di Bulma Rails</p>
+            <p>Sebelum kamu bisa berkomunikasi, kau harus login dulu ya</p>
+            <hr>
+            <p>Silahkan klik tombol <b>Sign In</b> di menu atas</p>
+        </div>
     </div>
 </div>
